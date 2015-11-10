@@ -18,7 +18,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>it.toto.services.restServer</groupId>
+            <groupId>com.github.toto-castaldi.services.restServer</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>
         </dependency>
