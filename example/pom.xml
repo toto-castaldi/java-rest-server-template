@@ -5,11 +5,12 @@
     <parent>
         <groupId>com.github.toto-castaldi.services.restServer</groupId>
         <artifactId>restServer</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <artifactId>example</artifactId>
     <packaging>war</packaging>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
