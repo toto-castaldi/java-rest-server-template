@@ -7,7 +7,7 @@
     </absolute-ordering>
 
     <listener>
-        <listener-class>com.acme.services.ExampleApiGuice</listener-class>
+        <listener-class>com.acme.services.ExampleApiServletContextListener</listener-class>
     </listener>
 
 

@@ -18,11 +18,14 @@ import com.github.totoCastaldi.restServer.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.*;
 
+import javax.ws.rs.container.ContainerRequestFilter;
+import java.util.List;
+
 /**
  * Created by github on 05/12/14.
  */
 @Slf4j
-public abstract class ApiGuice extends GuiceServletContextListener {
+public abstract class ApiServletContextListener extends GuiceServletContextListener {
 
     public static Injector injector;
 
@@ -70,13 +73,16 @@ public abstract class ApiGuice extends GuiceServletContextListener {
 
         GuiceInjector.setIstance(injector);
 
-        Resources.add(getPackage());
+        JerseyResources.addPackages(getPackages());
+        JerseyResources.addContainerRequestFilters(getContainerRequestFilters());
 
         return injector;
 
     }
 
-    protected abstract Package getPackage();
+    protected abstract List<Class<? extends ContainerRequestFilter>> getContainerRequestFilters();
+
+    protected abstract List<Package> getPackages();
 
     protected abstract String getPasswordSeed();
 

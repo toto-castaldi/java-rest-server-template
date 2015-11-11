@@ -1,6 +1,6 @@
 package com.acme.services;
 
-import com.github.totoCastaldi.restServer.ApiGuice;
+import com.github.totoCastaldi.restServer.ApiServletContextListener;
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
@@ -9,10 +9,7 @@ import com.google.inject.Module;
  * Created by github on 09/11/15.
  */
 
-public class ExampleApiGuice extends ApiGuice {
-
-    public ExampleApiGuice() {
-    }
+public class ExampleApiServletContextListener extends ApiServletContextListener {
 
     @Override
     protected Package getPackage() {

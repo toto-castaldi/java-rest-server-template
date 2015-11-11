@@ -30,7 +30,7 @@ public class ApiApplication extends ResourceConfig {
 
         packages(packageName);
 
-        final List<Package> packageCollections = Resources.getPackageCollections();
+        final List<Package> packageCollections = JerseyResources.getPackageCollections();
         for (Package packageCollection : packageCollections) {
             packages(packageCollection.getName());
         }
