@@ -68,6 +68,20 @@ public class ErrorResponse {
 
     }
 
+    public static ErrorResponse of(final String code, final String description) {
+        return ErrorResponse.of(new Error() {
+            @Override
+            public String name() {
+                return code;
+            }
+
+            @Override
+            public String getMessage() {
+                return description;
+            }
+        });
+    }
+
 
     public static ErrorResponse of(final Throwable e) {
         return ErrorResponse.of(new Error() {
