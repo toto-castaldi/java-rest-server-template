@@ -14,6 +14,7 @@ import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 
 import javax.inject.Inject;
+import javax.ws.rs.container.ContainerRequestFilter;
 import java.util.List;
 
 
@@ -43,6 +44,11 @@ public class ApiApplication extends ResourceConfig {
         register(AuthenticationAndProfileRequestFilter.class);
         register(BasicAuthenticationAbortRequestFilter.class);
         register(ProfileCustomerAbortRequestFilter.class);
+
+        final List<Class<? extends ContainerRequestFilter>> containerRequestFilters = JerseyResources.getContainerRequestFilters();
+        for (Class<? extends ContainerRequestFilter> containerRequestFilter : containerRequestFilters) {
+            register(containerRequestFilter);
+        }
 
 
         /** GUICE BRIDGE !!! **/
