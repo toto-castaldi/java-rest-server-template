@@ -3,17 +3,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.toto-castaldi.services.restServer</groupId>
-        <artifactId>restServer</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <groupId>com.github.toto-castaldi</groupId>
+        <artifactId>java8</artifactId>
+        <version>1.0</version>
     </parent>
 
+    <groupId>com.github.toto-castaldi.services.restServer</groupId>
     <artifactId>core</artifactId>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
+    <version>1.1-SNAPSHOT</version>
+
+
+    <description>A template for a Jersey REST server</description>
+    <url>http://toto-castaldi.github.io/rest-server-java-template/</url>
+
+    <scm>
+        <connection>scm:git:git@github.com:toto-castaldi/rest-server-java-template.git</connection>
+        <developerConnection>scm:git:git@github.com:toto-castaldi/rest-server-java-template.git</developerConnection>
+        <url>git@github.com:toto-castaldi/rest-server-java-template.git</url>
+    </scm>
+
 
 
     <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.specification.version}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.glassfish.hk2</groupId>
@@ -211,7 +230,7 @@
         <hibernate-version>4.3.6.Final</hibernate-version>
         <hibernate-validator-version>5.1.2.Final</hibernate-validator-version>
         <quartz.version>2.1.7</quartz.version>
-
+        <servlet.specification.version>3.0.1</servlet.specification.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
