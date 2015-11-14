@@ -1,7 +1,6 @@
 package com.github.totoCastaldi.restServer;
 
 import com.google.common.collect.Lists;
-import lombok.Getter;
 
 import javax.ws.rs.container.ContainerRequestFilter;
 import java.util.List;
@@ -37,4 +36,5 @@ public class JerseyResources {
     public static List<Class<? extends ContainerRequestFilter>> getContainerRequestFilters() {
         return containerRequestFilters;
     }
+
 }

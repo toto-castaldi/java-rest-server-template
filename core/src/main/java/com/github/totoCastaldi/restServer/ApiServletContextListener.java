@@ -1,13 +1,5 @@
 package com.github.totoCastaldi.restServer;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.name.Names;
-import com.google.inject.servlet.GuiceServletContextListener;
-import com.google.inject.servlet.ServletModule;
 import com.github.totoCastaldi.commons.ConfKey;
 import com.github.totoCastaldi.commons.GuiceInjector;
 import com.github.totoCastaldi.commons.MemoryShutdownableRepository;
@@ -15,10 +7,19 @@ import com.github.totoCastaldi.commons.ShutdownableRepository;
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.github.totoCastaldi.restServer.request.BasicAuthorizationRequest;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
+import com.google.common.collect.Lists;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.name.Names;
+import com.google.inject.servlet.GuiceServletContextListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.*;
 
 import javax.ws.rs.container.ContainerRequestFilter;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,12 +29,27 @@ import java.util.List;
 public abstract class ApiServletContextListener extends GuiceServletContextListener {
 
     public static Injector injector;
+    private final Collection<? extends Module> pluginModules;
+
+    public ApiServletContextListener(
+            Collection<? extends Module> pluginModules
+    ){
+        this.pluginModules = pluginModules;
+    }
+
+    public ApiServletContextListener(
+    ){
+        this.pluginModules = Lists.newArrayList();
+    }
 
     @Override
     protected Injector getInjector() {
         log.info("Getting injector");
 
-        injector = Guice.createInjector(
+        List<Module> modules = Lists.newArrayList();
+
+        modules.add(
+
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -63,13 +79,12 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
                         install(factoryModuleBuilder.build(BasicAuthorizationRequest.Factory.class));
                         install(getAppModule());
                     }
-                },
-                new ServletModule() {
-                    @Override
-                    protected void configureServlets() {
-                    }
                 }
         );
+
+        modules.addAll(pluginModules);
+
+        injector = Guice.createInjector(modules);
 
         GuiceInjector.setIstance(injector);
 

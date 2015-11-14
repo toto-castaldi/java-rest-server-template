@@ -4,7 +4,7 @@
 
     <parent>
         <groupId>com.github.toto-castaldi</groupId>
-        <artifactId>java8</artifactId>
+        <artifactId>java8-web</artifactId>
         <version>1.0</version>
     </parent>
 
@@ -25,14 +25,7 @@
     </scm>
 
 
-
     <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.specification.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.glassfish.hk2</groupId>
@@ -87,11 +80,6 @@
             <artifactId>guice-servlet</artifactId>
             <version>${guice.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-persist</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
@@ -112,27 +100,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator-version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version>
         </dependency>
-
 
         <dependency>
             <groupId>javax.mail</groupId>
@@ -204,33 +175,13 @@
             <version>1.3.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.9</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.8</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1102-jdbc41</version>
-        </dependency>
     </dependencies>
     <properties>
         <!-- your container specification http://tomcat.apache.org/whichversion.html -->
         <jersey.version>2.13</jersey.version>
         <guice.version>3.0</guice.version>
         <org.glassfish.version>2.3.0</org.glassfish.version>
-        <hibernate-version>4.3.6.Final</hibernate-version>
-        <hibernate-validator-version>5.1.2.Final</hibernate-validator-version>
         <quartz.version>2.1.7</quartz.version>
-        <servlet.specification.version>3.0.1</servlet.specification.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

@@ -10,7 +10,9 @@
 
     <modules>
         <module>core</module>
+	<module>plugin-persistence</module>
         <module>example</module>
+	<module>example-persistence</module>
     </modules>
     
 </project>
