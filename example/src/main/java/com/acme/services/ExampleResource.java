@@ -38,32 +38,6 @@ public class ExampleResource {
     @PUT
     @UserProfileCustomer
     @BasicAuthenticated
-    @Path(ExampleApiPath.ON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response on(
-            @Context HttpServletRequest httpServletRequest
-    ) {
-        final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
-        exampleResourceSupport.on(apiCurrentExecution.getUsername().get());
-        return apiResponse.createdReturns(httpServletRequest, ExampleApiPath.SEMAPHORE);
-    }
-
-    @PUT
-    @UserProfileCustomer
-    @BasicAuthenticated
-    @Path(ExampleApiPath.OFF)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response off(
-            @Context HttpServletRequest httpServletRequest
-    ) {
-        final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
-        exampleResourceSupport.off(apiCurrentExecution.getUsername().get());
-        return apiResponse.createdReturns(httpServletRequest, ExampleApiPath.SEMAPHORE);
-    }
-
-    @PUT
-    @UserProfileCustomer
-    @BasicAuthenticated
     @Path(ExampleApiPath.SWITCH)
     @Produces(MediaType.APPLICATION_JSON)
     public Response switchState(
@@ -83,6 +57,7 @@ public class ExampleResource {
     ) {
         final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
         return apiResponse.ok(ExampleResponse.of(exampleResourceSupport.status(apiCurrentExecution.getUsername().get())));
+        //return apiResponse.ok(ExampleResponse.of(true));
     }
 
 }

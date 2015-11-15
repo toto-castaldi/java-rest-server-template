@@ -18,8 +18,6 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.*;
 
-import javax.ws.rs.container.ContainerRequestFilter;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,22 +27,16 @@ import java.util.List;
 public abstract class ApiServletContextListener extends GuiceServletContextListener {
 
     public static Injector injector;
-    private final Collection<? extends Module> pluginModules;
-
-    public ApiServletContextListener(
-            Collection<? extends Module> pluginModules
-    ){
-        this.pluginModules = pluginModules;
-    }
 
     public ApiServletContextListener(
     ){
-        this.pluginModules = Lists.newArrayList();
     }
 
     @Override
     protected Injector getInjector() {
         log.info("Getting injector");
+
+        final RestServerConf appModule = getAppConf();
 
         List<Module> modules = Lists.newArrayList();
 
@@ -73,35 +65,27 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
                         bind(ApiScheduler.class);
                         bind(TimeProvider.class);
                         bind(ShutdownableRepository.class).to(MemoryShutdownableRepository.class);
-                        bind(CustomerDao.class).to(getCustomerDaoClass());
-                        bind(ApiValidation.class).toInstance(new ApiValidation(getPasswordSeed()));
+                        bind(CustomerDao.class).to(appModule.getCustomerDao());
+                        bind(ApiValidation.class).toInstance(new ApiValidation(appModule.getSeed()));
 
                         install(factoryModuleBuilder.build(BasicAuthorizationRequest.Factory.class));
-                        install(getAppModule());
                     }
                 }
         );
 
-        modules.addAll(pluginModules);
+        modules.addAll(appModule.getModules());
 
         injector = Guice.createInjector(modules);
 
         GuiceInjector.setIstance(injector);
 
-        JerseyResources.addPackages(getPackages());
-        JerseyResources.addContainerRequestFilters(getContainerRequestFilters());
+        JerseyResources.addPackages(appModule.getPackages());
+        JerseyResources.addContainerRequestFilters(appModule.getFilters());
 
         return injector;
 
     }
 
-    protected abstract List<Class<? extends ContainerRequestFilter>> getContainerRequestFilters();
+    protected abstract RestServerConf getAppConf();
 
-    protected abstract List<Package> getPackages();
-
-    protected abstract String getPasswordSeed();
-
-    protected abstract Class<? extends CustomerDao> getCustomerDaoClass();
-
-    public abstract Module getAppModule();
 }

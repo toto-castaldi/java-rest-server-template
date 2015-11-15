@@ -4,6 +4,7 @@ import com.github.totoCastaldi.restServer.ApiCurrentExecution;
 import com.github.totoCastaldi.restServer.annotation.BasicAuthenticated;
 import com.github.totoCastaldi.restServer.annotation.UserProfileCustomer;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
+import com.google.common.base.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.inject.Inject;
@@ -42,8 +43,8 @@ public class ExampleResource {
             @NotNull @Valid ExampleResourceCreateRequest request
     ) {
         log.info("create person {}", request);
-        String id = exampleDao.create(request);
-        return apiResponse.createdReturns(httpServletRequest, "person", id);
+        Long id = exampleDao.create(request);
+        return apiResponse.createdReturns(httpServletRequest, "person", String.valueOf(id));
     }
 
     @GET
@@ -51,12 +52,16 @@ public class ExampleResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response status(
             @Context HttpServletRequest httpServletRequest,
-            @PathParam("id") String id
+            @PathParam("id") Long id
     ) {
         log.info("id = {}", id);
-        String name = exampleDao.getNameById(id);
-        ExampleResponse exampleResponse = ExampleResponse.of(name);
-        return apiResponse.ok(exampleResponse);
+        final Optional<ExamplePersonEntity> nameById = exampleDao.getNameById(id);
+        if (nameById.isPresent()) {
+            ExampleResponse exampleResponse = ExampleResponse.of(nameById.get().getName());
+            return apiResponse.ok(exampleResponse);
+        } else {
+            return apiResponse.notFound();
+        }
     }
 
 }

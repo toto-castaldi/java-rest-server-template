@@ -4,7 +4,7 @@
 
     <parent>
         <groupId>com.github.toto-castaldi</groupId>
-        <artifactId>java8</artifactId>
+        <artifactId>java8-web</artifactId>
         <version>1.0</version>
     </parent>
 
@@ -13,7 +13,6 @@
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <version>1.1-SNAPSHOT</version>
-
 
     <dependencies>
         <dependency>
@@ -37,11 +36,6 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate-version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator-version}</version>
-        </dependency>
 
     </dependencies>
 
@@ -49,7 +43,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <guice.version>3.0</guice.version>
         <hibernate-version>4.3.6.Final</hibernate-version>
-        <hibernate-validator-version>5.1.2.Final</hibernate-validator-version>
     </properties>
 
 </project>

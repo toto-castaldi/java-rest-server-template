@@ -1,6 +1,7 @@
 package com.acme.services;
 
 import com.github.totoCastaldi.restServer.ApiServletContextListener;
+import com.github.totoCastaldi.restServer.RestServerConf;
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -16,32 +17,18 @@ import java.util.List;
 public class ExampleApiServletContextListener extends ApiServletContextListener {
 
     @Override
-    protected List<Class<? extends ContainerRequestFilter>> getContainerRequestFilters() {
-        return Lists.newArrayList(ExampleHeaderCheckFilter.class);
-    }
-
-    @Override
-    protected List<Package> getPackages() {
-        return Lists.newArrayList(ExampleResource.class.getPackage());
-    }
-
-    @Override
-    protected String getPasswordSeed() {
-        return "13354-PWD";
-    }
-
-    @Override
-    protected Class<? extends CustomerDao> getCustomerDaoClass() {
-        return ExampleCustomerDao.class;
-    }
-
-    @Override
-    public Module getAppModule() {
-        return new AbstractModule() {
+    public RestServerConf getAppConf() {
+        RestServerConf.Builder builder = RestServerConf.builder();
+        builder.add(ExampleResource.class.getPackage());
+        builder.setCustomerDao(ExampleCustomerDao.class);
+        builder.setPassworSeed("13354-PWD");
+        builder.add(ExampleHeaderCheckFilter.class);
+        builder.add(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(ExampleResourceSupport.class);
             }
-        };
+        });
+        return builder.build();
     }
 }

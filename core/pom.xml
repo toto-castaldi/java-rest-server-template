@@ -94,6 +94,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator-version}</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.0</version>
@@ -183,6 +190,7 @@
         <org.glassfish.version>2.3.0</org.glassfish.version>
         <quartz.version>2.1.7</quartz.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hibernate-validator-version>5.1.2.Final</hibernate-validator-version>
     </properties>
 
 </project>
