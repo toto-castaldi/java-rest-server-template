@@ -16,6 +16,8 @@ import java.util.List;
 
 public class ExampleApiServletContextListener extends ApiServletContextListener {
 
+    public static final String CONF_TEST = "TEST";
+
     @Override
     public RestServerConf getAppConf() {
         RestServerConf.Builder builder = RestServerConf.builder();
@@ -27,8 +29,10 @@ public class ExampleApiServletContextListener extends ApiServletContextListener 
             @Override
             protected void configure() {
                 bind(ExampleResourceSupport.class);
+                bind(ExampleHeaderCheckFilter.class);
             }
         });
+        builder.addStringConf(CONF_TEST);
         return builder.build();
     }
 }

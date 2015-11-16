@@ -1,6 +1,5 @@
 package com.github.totoCastaldi.restServer;
 
-import com.github.totoCastaldi.commons.ConfKey;
 import com.github.totoCastaldi.commons.GuiceInjector;
 import com.github.totoCastaldi.commons.MemoryShutdownableRepository;
 import com.github.totoCastaldi.commons.ShutdownableRepository;
@@ -55,8 +54,11 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
                         } catch (ConfigurationException e) {
                             log.warn("",e);
                         }
-                        for (String confKey : ConfKey.values()) {
-                            bind(String.class).annotatedWith(Names.named(confKey)).toInstance(compositeConfiguration.getString(confKey));
+
+                        Iterable<RestServerConf.AppConfKey> confKeys = appModule.getConfKeys();
+
+                        for (RestServerConf.AppConfKey confKey : confKeys) {
+                            if (confKey.getClazz() == RestServerConf.TYPE.STRING) bind(String.class).annotatedWith(Names.named(confKey.getName())).toInstance(compositeConfiguration.getString(confKey.getName()));
                         }
 
                         bind(ApiResponse.class);
