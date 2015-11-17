@@ -37,6 +37,8 @@ public class ErrorResponseEntry {
         ErrorResponseEntry create(final ErrorResponseCode code);
 
         ErrorResponseEntry create(final ConstraintViolation<?> constraintViolation);
+
+        ErrorResponseEntry create(final String description);
     }
 
     @AssistedInject
@@ -46,6 +48,15 @@ public class ErrorResponseEntry {
     ) {
         this.code = ErrorResponseCode.EXCEPTION.name();
         this.message = e.getMessage();
+    }
+
+    @AssistedInject
+    public ErrorResponseEntry(
+            @Assisted("description") String description
+
+    ) {
+        this.code = description;
+        this.message = description;
     }
 
     @AssistedInject

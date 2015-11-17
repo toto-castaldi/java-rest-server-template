@@ -107,6 +107,27 @@ public class ApiResponse {
     /**
      * 400
      */
+    public Response badResponse(ErrorResponseEntry... errors) {
+        return contentType(Response.status(400).entity(toBody(errors))).build();
+    }
+
+    /**
+     * 400
+     */
+    public Response badResponse(String description ) {
+        return contentType(Response.status(400).entity(toBody(new ErrorResponseEntry[]{errorResponseFactory.create(description)}))).build();
+    }
+
+    /**
+     * 400
+     */
+    public Response badResponse(String code, String message ) {
+        return contentType(Response.status(400).entity(toBody(new ErrorResponseEntry[]{ErrorResponseEntry.of(code, message)}))).build();
+    }
+
+    /**
+     * 400
+     */
     public Response badResponse(Throwable t) {
         return contentType(Response.status(400).entity(toBody(t))).build();
     }
@@ -147,6 +168,10 @@ public class ApiResponse {
                 return errorResponseFactory.create(httpServletRequest, errorResponseCode);
             }
         }), ErrorResponseEntry.class));
+    }
+
+    private ErrorResponse toBody(ErrorResponseEntry[] errors) {
+        return new ErrorResponse(errors);
     }
 
     private ErrorResponse toBody(Throwable t) {
