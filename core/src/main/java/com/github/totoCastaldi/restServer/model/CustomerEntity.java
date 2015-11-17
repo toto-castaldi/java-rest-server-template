@@ -12,7 +12,7 @@ public class CustomerEntity {
     @Getter
     private String username;
     @Getter
-    private String password;
+    private String encodedPassword;
     @Getter
     private Boolean admin;
     @Getter

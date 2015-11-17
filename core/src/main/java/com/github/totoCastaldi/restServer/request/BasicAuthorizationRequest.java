@@ -46,7 +46,7 @@ public class BasicAuthorizationRequest implements AuthorizationRequest {
             this.username = credentials[0];
             final String password = credentials[1];
             final Optional<CustomerEntity> lightUserEntityOptional = CustomerDao.findByUsername(this.username);
-            if (lightUserEntityOptional.isPresent() && apiPassword.validateEndcodedPassword(lightUserEntityOptional.get(), password)) {
+            if (lightUserEntityOptional.isPresent() && apiPassword.validate(lightUserEntityOptional.get(), password)) {
                 this.passed = true;
             } else {
                 this.passed = false;

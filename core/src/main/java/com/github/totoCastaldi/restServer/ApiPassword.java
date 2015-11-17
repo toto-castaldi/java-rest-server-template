@@ -19,12 +19,12 @@ public class ApiPassword {
         return DigestUtils.md5Hex(password + seed + username);
     }
 
-    public boolean validateEndcodedPassword(CustomerEntity user, String password) {
-        return validateEndcodedPassword(user.getPassword(), password);
+    public boolean validate(CustomerEntity user, String password) {
+        return validate(user.getUsername(), password, user.getEncodedPassword());
     }
 
-    public boolean validateEndcodedPassword(String userName, String password) {
-        return StringUtils.equals(encodePassword(userName, password), password);
+    public boolean validate(String userName, String password, String encodedPassword) {
+        return StringUtils.equals(encodePassword(userName, password), encodedPassword);
     }
 
 }
