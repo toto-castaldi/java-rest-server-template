@@ -8,6 +8,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.annotation.Nullable;
@@ -101,14 +102,29 @@ public class ApiResponse {
      * 400
      */
     public Response badResponse(final HttpServletRequest httpServletRequest, ErrorResponseCode... errors) {
-        return contentType(Response.status(400).entity(toBody(errors, httpServletRequest))).build();
+        if (ArrayUtils.getLength(errors) > 0 ) {
+            return contentType(Response.status(400).entity(toBody(errors, httpServletRequest))).build();
+        } else {
+            return simpleBadResponse();
+        }
     }
 
     /**
      * 400
      */
     public Response badResponse(ErrorResponseEntry... errors) {
-        return contentType(Response.status(400).entity(toBody(errors))).build();
+        if (ArrayUtils.getLength(errors) > 0 ) {
+            return contentType(Response.status(400).entity(toBody(errors))).build();
+        } else {
+            return simpleBadResponse();
+        }
+    }
+
+    /**
+     * 400
+     */
+    public Response simpleBadResponse() {
+        return contentType(Response.status(400)).build();
     }
 
     /**
