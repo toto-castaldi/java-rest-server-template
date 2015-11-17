@@ -4,7 +4,7 @@ import com.github.totoCastaldi.restServer.ApiCurrentExecution;
 import com.github.totoCastaldi.restServer.ApiHeaderUtils;
 import com.github.totoCastaldi.restServer.AuthenticationType;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
-import com.github.totoCastaldi.restServer.response.ErrorResponse;
+import com.github.totoCastaldi.restServer.response.ErrorResponseCode;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,9 +45,8 @@ abstract class AuthenticationAbortRequestFilter implements ContainerRequestFilte
             String authorizationRequest = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
             log.info("login post match {} {}", authorizationRequest, currentExecution);
 
-            containerRequestContext.abortWith(apiResponse.unauthorize(apiHeaderUtils.parseAuthorization(authorizationRequest, authenticationType), ErrorResponse.of(ErrorResponse.DetailsCode.AUTHENTICATION_REQUIRED, ErrorResponse.DetailsCode.INVALID_CREDENTIALS)));
+            containerRequestContext.abortWith(apiResponse.unauthorize(httpRequest, apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest, authenticationType), ErrorResponseCode.AUTHENTICATION_REQUIRED));
         }
 
     }
 }
-

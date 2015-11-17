@@ -1,8 +1,8 @@
 package com.github.totoCastaldi.restServer;
 
+import com.github.totoCastaldi.restServer.request.BasicAuthorizationRequest;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.github.totoCastaldi.restServer.request.BasicAuthorizationRequest;
 import org.apache.commons.lang.StringUtils;
 
 import javax.inject.Inject;
@@ -43,5 +43,22 @@ public class ApiHeaderUtils {
         }
         return result;
     }
-}
 
+    public Iterable<AuthenticationType> parseAuthorizationRequestes(String authSeparated, AuthenticationType... types) {
+        List<String> auths = StringUtils.isNotBlank(authSeparated) ? Arrays.asList(StringUtils.splitByWholeSeparator(authSeparated, COMMA)) : Collections.<String>emptyList();
+        List<AuthenticationType> authenticationTypes = types.length > 0 ? Arrays.asList(types) : Arrays.asList(AuthenticationType.values());
+
+
+        List<AuthenticationType> result = Lists.newArrayList();
+        if (auths != null) {
+            for (String a : auths) {
+                String auth = StringUtils.trimToEmpty(a);
+                if (StringUtils.startsWith(auth, PREFIX_BASIC) && Iterables.contains(authenticationTypes, AuthenticationType.BASIC)) {
+                    result.add(AuthenticationType.BASIC);
+                }
+            }
+        }
+        return result;
+    }
+
+}

@@ -21,18 +21,18 @@ import javax.ws.rs.core.Response;
  */
 @Path(ExampleApiPath.SEMAPHORE)
 @Slf4j
-public class ExampleResource {
+public class ExampleResourceSemaphore {
 
     private final ApiResponse apiResponse;
-    private final ExampleResourceSupport exampleResourceSupport;
+    private final ExampleSemaphoreSupport exampleSemaphoreSupport;
 
     @Inject
-    public ExampleResource(
+    public ExampleResourceSemaphore(
             ApiResponse apiResponse,
-            ExampleResourceSupport exampleResourceSupport
+            ExampleSemaphoreSupport exampleSemaphoreSupport
     ) {
         this.apiResponse = apiResponse;
-        this.exampleResourceSupport = exampleResourceSupport;
+        this.exampleSemaphoreSupport = exampleSemaphoreSupport;
     }
 
     @PUT
@@ -44,7 +44,7 @@ public class ExampleResource {
             @Context HttpServletRequest httpServletRequest
     ) {
         final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
-        exampleResourceSupport.switchState(apiCurrentExecution.getUsername().get());
+        exampleSemaphoreSupport.switchState(apiCurrentExecution.getUsername().get());
         return apiResponse.createdReturns(httpServletRequest, ExampleApiPath.SEMAPHORE);
     }
 
@@ -56,8 +56,7 @@ public class ExampleResource {
             @Context HttpServletRequest httpServletRequest
     ) {
         final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
-        return apiResponse.ok(ExampleResponse.of(exampleResourceSupport.status(apiCurrentExecution.getUsername().get())));
-        //return apiResponse.ok(ExampleResponse.of(true));
+        return apiResponse.ok(ExampleResponse.of(exampleSemaphoreSupport.status(apiCurrentExecution.getUsername().get())));
     }
 
 }

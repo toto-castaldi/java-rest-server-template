@@ -2,6 +2,7 @@ package com.github.totoCastaldi.restServer;
 
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.github.totoCastaldi.restServer.model.DummyCustomerDao;
+import com.github.totoCastaldi.restServer.response.ApiErrorMessage;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -33,6 +34,8 @@ public class RestServerConf {
     private String seed = StringUtils.EMPTY;
     @Getter
     private List<Class<? extends ContainerRequestFilter>> filters = Lists.newArrayList();
+    @Getter
+    private ApiErrorMessage apiErrorMessage = new DummyApiErrorMessage();
 
     public static Builder builder() {
         return new RestServerConf.Builder();

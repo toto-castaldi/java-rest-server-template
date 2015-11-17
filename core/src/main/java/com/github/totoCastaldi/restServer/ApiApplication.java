@@ -1,10 +1,7 @@
 package com.github.totoCastaldi.restServer;
 
 import com.github.totoCastaldi.commons.GuiceInjector;
-import com.github.totoCastaldi.restServer.filter.AuthenticationAndProfileRequestFilter;
-import com.github.totoCastaldi.restServer.filter.BasicAuthenticationAbortRequestFilter;
-import com.github.totoCastaldi.restServer.filter.CommonResponseHeaderFilter;
-import com.github.totoCastaldi.restServer.filter.ProfileCustomerAbortRequestFilter;
+import com.github.totoCastaldi.restServer.filter.*;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.filter.LoggingFilter;
@@ -38,12 +35,16 @@ public class ApiApplication extends ResourceConfig {
 
         register(JacksonFeature.class);
         register(ApiMapperThrowable.class);
+        register(ApiMapperMissingHeaderException.class);
+        register(ApiMapperConstraintViolationException.class);
+        register(ApiMapperNotFoundException.class);
         register(LoggingFilter.class);
 
         register(CommonResponseHeaderFilter.class);
         register(AuthenticationAndProfileRequestFilter.class);
         register(BasicAuthenticationAbortRequestFilter.class);
         register(ProfileCustomerAbortRequestFilter.class);
+        register(HeadersRequestFilter.class);
 
         final List<Class<? extends ContainerRequestFilter>> containerRequestFilters = JerseyResources.getContainerRequestFilters();
         for (Class<? extends ContainerRequestFilter> containerRequestFilter : containerRequestFilters) {

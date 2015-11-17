@@ -5,6 +5,8 @@ import com.github.totoCastaldi.restServer.ApiHeaderUtils;
 import com.github.totoCastaldi.restServer.UserType;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
 import com.github.totoCastaldi.restServer.response.ErrorResponse;
+import com.github.totoCastaldi.restServer.response.ErrorResponseCode;
+import com.github.totoCastaldi.restServer.response.ErrorResponseEntry;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,20 +25,20 @@ public abstract class BaseProfileAbortRequestFilter implements ContainerRequestF
     private final ApiResponse apiResponse;
     private final HttpServletRequest httpRequest;
     private final UserType role;
-    private final ErrorResponse.DetailsCode errorCode;
+    private final ErrorResponseEntry.Factory errorResponseEntryFactory;
 
     public BaseProfileAbortRequestFilter(
             ApiHeaderUtils apiHeaderUtils,
             ApiResponse apiResponse,
             HttpServletRequest httpRequest,
             UserType role,
-            ErrorResponse.DetailsCode errorCode
+            ErrorResponseEntry.Factory errorResponseEntryFactory
     ) {
         this.apiHeaderUtils = apiHeaderUtils;
         this.apiResponse = apiResponse;
         this.httpRequest = httpRequest;
         this.role = role;
-        this.errorCode = errorCode;
+        this.errorResponseEntryFactory = errorResponseEntryFactory;
     }
 
     @Override
@@ -48,10 +50,10 @@ public abstract class BaseProfileAbortRequestFilter implements ContainerRequestF
             final UserType userType = currentExecution.getUserType().or(UserType.NONE);
             if (!userType.isInRole(role)) {
                 log.info("NOT {} profile detected : {}", role, userType);
-                containerRequestContext.abortWith(apiResponse.unauthorize(apiHeaderUtils.parseAuthorization(authorizationRequest), ErrorResponse.of(ErrorResponse.DetailsCode.INVALID_PROFILE, errorCode)));
+                containerRequestContext.abortWith(apiResponse.unauthorize(httpRequest, apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest), ErrorResponseCode.INVALID_PROFILE));
             }
         } else {
-            containerRequestContext.abortWith(apiResponse.unauthorize(apiHeaderUtils.parseAuthorization(authorizationRequest), ErrorResponse.of(ErrorResponse.DetailsCode.AUTHENTICATION_REQUIRED, ErrorResponse.DetailsCode.INVALID_CREDENTIALS)));
+            containerRequestContext.abortWith(apiResponse.unauthorize(httpRequest, apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest), ErrorResponseCode.AUTHENTICATION_REQUIRED));
         }
 
     }

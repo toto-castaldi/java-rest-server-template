@@ -3,21 +3,79 @@ package com.github.totoCastaldi.restServer;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by github on 11/12/14.
  */
-@RequiredArgsConstructor(staticName = "on")
+@Slf4j
 public class ApiCurrentExecution {
 
-    private enum KEY {AUTHENTICATION_NOT_PASSED, USERNAME, USER_TYPE, AUTHENTICATION_PASSED};
+    public void setLocale(Locale locale) {
+        setProperty(KEY.LOCALE, locale);
+    }
+
+    public Optional<Locale> getLocale() {
+        return Optional.fromNullable((Locale) getProperty(KEY.LOCALE));
+    }
+
+    public void populateHttpHeaders(HttpServletRequest httpServletRequest) {
+        Map<HEADER, String> headers = Maps.newHashMap();
+        for (HEADER header : HEADER.values()) {
+            String headerValue = null;
+            try {
+                headerValue = httpServletRequest.getHeader(header.getHttpHeader());
+            } catch (Exception e) {
+                log.warn(StringUtils.EMPTY, e);
+            }
+            if (StringUtils.isNotBlank(headerValue)) {
+                headers.put(header, headerValue);
+            }
+        }
+        setProperty(KEY.HEADERS, headers);
+    }
+
+
+    private enum KEY {AUTHENTICATION_NOT_PASSED, USERNAME, USER_TYPE, HEADERS, LOCALE, AUTHENTICATION_PASSED};
+
+    public static ApiCurrentExecution on(HttpServletRequest httpServletRequest) {
+        return new ApiCurrentExecution(httpServletRequest);
+    }
+
+    public interface Factory {
+        ApiCurrentExecution create(@Assisted("currentHttpRequest") HttpServletRequest currentHttpRequest);
+    }
+
+    public enum HEADER {
+        X_FORWARDED_PROTO("X-Forwarded-Proto");
+
+        @Getter
+        private final String httpHeader;
+
+        HEADER (String httpHeader) {
+            this.httpHeader = httpHeader;
+        }
+    };
 
     @NonNull
     private final HttpServletRequest currentHttpRequest;
+
+    @AssistedInject
+    public ApiCurrentExecution(
+            @Assisted("currentHttpRequest") HttpServletRequest currentHttpRequest
+    ) {
+        this.currentHttpRequest = currentHttpRequest;
+    }
 
 
     @Override
@@ -71,6 +129,11 @@ public class ApiCurrentExecution {
 
     public void authenticationPassed(Iterable<AuthenticationType> authenticationType) {
         setProperty(ApiCurrentExecution.KEY.AUTHENTICATION_PASSED, authenticationType);
+    }
+
+    public Optional<String> getHeader(HEADER header) {
+        Map<HEADER, String> headers = getProperty(KEY.HEADERS);
+        return Optional.fromNullable(headers.get(header));
     }
 
     public Optional<UserType> getUserType() {

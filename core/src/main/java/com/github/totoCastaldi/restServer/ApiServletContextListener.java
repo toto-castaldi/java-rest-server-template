@@ -5,7 +5,9 @@ import com.github.totoCastaldi.commons.MemoryShutdownableRepository;
 import com.github.totoCastaldi.commons.ShutdownableRepository;
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.github.totoCastaldi.restServer.request.BasicAuthorizationRequest;
+import com.github.totoCastaldi.restServer.response.ApiErrorMessage;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
+import com.github.totoCastaldi.restServer.response.ErrorResponseEntry;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -69,8 +71,11 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
                         bind(ShutdownableRepository.class).to(MemoryShutdownableRepository.class);
                         bind(CustomerDao.class).to(appModule.getCustomerDao());
                         bind(ApiValidation.class).toInstance(new ApiValidation(appModule.getSeed()));
+                        bind(ApiErrorMessage.class).toInstance(appModule.getApiErrorMessage());
 
                         install(factoryModuleBuilder.build(BasicAuthorizationRequest.Factory.class));
+                        install(factoryModuleBuilder.build(ErrorResponseEntry.Factory.class));
+                        install(factoryModuleBuilder.build(ApiCurrentExecution.Factory.class));
                     }
                 }
         );

@@ -12,4 +12,5 @@ public class ExampleApiPath {
     public static final String OFF = "off";
     public static final String SWITCH = "switch";
 
+    public static final String VALIDATION = "validation";
 }

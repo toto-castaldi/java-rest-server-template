@@ -13,13 +13,13 @@ import java.util.Map;
  */
 @Singleton
 @Slf4j
-public class ExampleResourceSupport {
+public class ExampleSemaphoreSupport {
 
     public static final boolean DEFAULT_STATE = true;
     private Map<String, Boolean> statuses = Maps.newConcurrentMap();
 
     @Inject
-    public ExampleResourceSupport(
+    public ExampleSemaphoreSupport(
     ) {
     }
 
