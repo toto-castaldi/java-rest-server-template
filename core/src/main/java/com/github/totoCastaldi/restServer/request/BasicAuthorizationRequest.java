@@ -3,7 +3,7 @@ package com.github.totoCastaldi.restServer.request;
 import com.google.common.base.Optional;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import com.github.totoCastaldi.restServer.ApiValidation;
+import com.github.totoCastaldi.restServer.ApiPassword;
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.github.totoCastaldi.restServer.model.CustomerEntity;
 import lombok.Getter;
@@ -35,7 +35,7 @@ public class BasicAuthorizationRequest implements AuthorizationRequest {
     @AssistedInject
     public BasicAuthorizationRequest(
             CustomerDao CustomerDao,
-            ApiValidation apiValidation,
+            ApiPassword apiPassword,
             @Assisted("md5Credentials") String md5Credentials
     ) {
         this.request = md5Credentials;
@@ -46,7 +46,7 @@ public class BasicAuthorizationRequest implements AuthorizationRequest {
             this.username = credentials[0];
             final String password = credentials[1];
             final Optional<CustomerEntity> lightUserEntityOptional = CustomerDao.findByUsername(this.username);
-            if (lightUserEntityOptional.isPresent() && apiValidation.validCustomerPassword(lightUserEntityOptional.get(), password)) {
+            if (lightUserEntityOptional.isPresent() && apiPassword.validateEndcodedPassword(lightUserEntityOptional.get(), password)) {
                 this.passed = true;
             } else {
                 this.passed = false;

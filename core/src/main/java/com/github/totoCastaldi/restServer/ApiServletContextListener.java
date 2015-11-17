@@ -70,7 +70,7 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
                         bind(TimeProvider.class);
                         bind(ShutdownableRepository.class).to(MemoryShutdownableRepository.class);
                         bind(CustomerDao.class).to(appModule.getCustomerDao());
-                        bind(ApiValidation.class).toInstance(new ApiValidation(appModule.getSeed()));
+                        bind(ApiPassword.class).toInstance(new ApiPassword(appModule.getSeed()));
                         bind(ApiErrorMessage.class).toInstance(appModule.getApiErrorMessage());
 
                         install(factoryModuleBuilder.build(BasicAuthorizationRequest.Factory.class));
