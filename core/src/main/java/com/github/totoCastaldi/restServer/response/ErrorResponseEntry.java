@@ -32,13 +32,15 @@ public class ErrorResponseEntry {
 
         ErrorResponseEntry create(final Throwable e);
 
+        ErrorResponseEntry create(final String description);
+
         ErrorResponseEntry create(final HttpServletRequest httpServletRequest, final ErrorResponseCode code);
 
         ErrorResponseEntry create(final ErrorResponseCode code);
 
         ErrorResponseEntry create(final ConstraintViolation<?> constraintViolation);
 
-        ErrorResponseEntry create(final String description);
+
     }
 
     @AssistedInject
@@ -52,8 +54,7 @@ public class ErrorResponseEntry {
 
     @AssistedInject
     public ErrorResponseEntry(
-            @Assisted("description") String description
-
+            @Assisted String description
     ) {
         this.code = description;
         this.message = description;
