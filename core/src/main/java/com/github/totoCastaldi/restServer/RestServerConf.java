@@ -2,6 +2,7 @@ package com.github.totoCastaldi.restServer;
 
 import com.github.totoCastaldi.restServer.model.CustomerDao;
 import com.github.totoCastaldi.restServer.model.DummyCustomerDao;
+import com.github.totoCastaldi.restServer.plugin.Plugin;
 import com.github.totoCastaldi.restServer.response.ApiErrorMessage;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -48,6 +49,11 @@ public class RestServerConf {
 
         public Builder add(Package aPackage) {
             result.packages.add(aPackage);
+            return this;
+        }
+
+        public Builder add(Plugin plugin) {
+            plugin.config(this);
             return this;
         }
 

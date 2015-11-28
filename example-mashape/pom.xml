@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>com.github.toto-castaldi.services.restServer</groupId>
-    <artifactId>example-persistence</artifactId>
+    <artifactId>example-mashape</artifactId>
     <packaging>war</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <version>1.2-SNAPSHOT</version>
@@ -23,15 +23,9 @@
         </dependency>
         <dependency>
             <groupId>com.github.toto-castaldi.services.restServer</groupId>
-            <artifactId>plugin-persistence</artifactId>
+            <artifactId>plugin-mashape</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1102-jdbc41</version>
-        </dependency>
-
     </dependencies>
 
     <properties>

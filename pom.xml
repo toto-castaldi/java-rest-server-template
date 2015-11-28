@@ -4,15 +4,17 @@
     <groupId>com.github.toto-castaldi.services.restServer</groupId>
     <artifactId>restServer</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 
     <modules>
         <module>core</module>
-	<module>plugin-persistence</module>
+        <module>plugin-persistence</module>
+        <module>plugin-mashape</module>
         <module>example</module>
-	<module>example-persistence</module>
+        <module>example-persistence</module>
+        <module>example-mashape</module>
     </modules>
     
 </project>
