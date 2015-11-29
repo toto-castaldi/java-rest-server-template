@@ -25,7 +25,7 @@ public class ExampleApiServletContextListener extends ApiServletContextListener 
             }
         });
         builder.addStringConf(CONF_TEST);
-        builder.set(ExampleBasicAuthorization.class);
+        builder.setBasicAutharization(ExampleBasicAuthorization.class);
         return builder.build();
     }
 }

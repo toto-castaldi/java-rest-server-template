@@ -1,6 +1,7 @@
 package com.github.totoCastaldi.restServer.filter;
 
 import com.github.totoCastaldi.restServer.authorization.UserProfile;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.github.totoCastaldi.restServer.*;
 import com.github.totoCastaldi.restServer.request.AuthorizationRequest;
@@ -76,7 +77,7 @@ public class AuthenticationAndProfileRequestFilter implements ContainerRequestFi
                 currentExecution.authenticationPassed(authenticationPassed);
                 currentExecution.authenticationNotPassed(authenticationNotPassed);
                 if (userProfile != null) {
-                    currentExecution.setUserType(userProfile.resolve(username).get());
+                    currentExecution.setUserType(userProfile.resolve(username).or(UserType.NONE));
                 } else {
                     currentExecution.setUserType(UserType.NONE);
                 }

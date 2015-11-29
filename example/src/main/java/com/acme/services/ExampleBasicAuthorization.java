@@ -3,13 +3,14 @@ package com.acme.services;
 import com.github.totoCastaldi.restServer.UserType;
 import com.github.totoCastaldi.restServer.authorization.AuthorizationResult;
 import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
+import com.github.totoCastaldi.restServer.authorization.UserProfile;
 import com.google.common.base.Optional;
 import org.apache.commons.lang.StringUtils;
 
 /**
  * Created by toto on 29/11/15.
  */
-public class ExampleBasicAuthorization implements BasicAuthorization {
+public class ExampleBasicAuthorization implements BasicAuthorization, UserProfile {
     @Override
     public AuthorizationResult checkCredential(String username, String password) {
         boolean passed = StringUtils.equals(username, "toto") && StringUtils.equals(password, "1234");

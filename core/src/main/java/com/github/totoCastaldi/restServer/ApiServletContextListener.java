@@ -74,9 +74,13 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
 
                         if (appModule.getBasicAuthorizationSupport() != null) {
                             bind(BasicAuthorization.class).to(appModule.getBasicAuthorizationSupport());
-                            bind(UserProfile.class).to(appModule.getBasicAuthorizationSupport());
                         } else {
                             bind(BasicAuthorization.class).toProvider(Providers.of((BasicAuthorization)null));
+                        }
+
+                        if (appModule.getUserTypeSupport() != null) {
+                            bind(UserProfile.class).to(appModule.getUserTypeSupport());
+                        } else {
                             bind(UserProfile.class).toProvider(Providers.of((UserProfile)null));
                         }
 

@@ -1,6 +1,7 @@
 package com.github.totoCastaldi.restServer;
 
 import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
+import com.github.totoCastaldi.restServer.authorization.UserProfile;
 import com.github.totoCastaldi.restServer.plugin.Plugin;
 import com.github.totoCastaldi.restServer.response.ApiErrorMessage;
 import com.google.common.collect.Lists;
@@ -21,6 +22,8 @@ public class RestServerConf {
 
     @Getter
     private Class<? extends BasicAuthorization> basicAuthorizationSupport = null;
+    @Getter
+    private Class<? extends UserProfile> userTypeSupport = null;
     @Getter
     private List<AppConfKey> confKeys = Lists.newArrayList();
     @Getter
@@ -61,8 +64,13 @@ public class RestServerConf {
             return this;
         }
 
-        public Builder set(Class<? extends BasicAuthorization> basicAuthorizationClass) {
+        public Builder setBasicAutharization(Class<? extends BasicAuthorization> basicAuthorizationClass) {
             result.basicAuthorizationSupport = basicAuthorizationClass;
+            return this;
+        }
+
+        public Builder setUserProfile(Class<? extends UserProfile> userTypeClass) {
+            result.userTypeSupport = userTypeClass;
             return this;
         }
 
