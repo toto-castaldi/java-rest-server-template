@@ -1,6 +1,7 @@
 package com.acme.services;
 
 import com.github.totoCastaldi.restServer.UserType;
+import com.github.totoCastaldi.restServer.authorization.AuthorizationResult;
 import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
 import com.google.common.base.Optional;
 import org.apache.commons.lang.StringUtils;
@@ -10,8 +11,13 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ExampleBasicAuthorization implements BasicAuthorization {
     @Override
-    public boolean checkCredential(String username, String password) {
-        return StringUtils.equals(username, "toto") && StringUtils.equals(password, "1234");
+    public AuthorizationResult checkCredential(String username, String password) {
+        boolean passed = StringUtils.equals(username, "toto") && StringUtils.equals(password, "1234");
+        if (passed) {
+            return AuthorizationResult.passed();
+        } else {
+            return AuthorizationResult.notPassed("register you !");
+        }
     }
 
     @Override

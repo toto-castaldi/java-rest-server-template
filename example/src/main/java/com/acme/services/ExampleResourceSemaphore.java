@@ -35,19 +35,6 @@ public class ExampleResourceSemaphore {
         this.exampleSemaphoreSupport = exampleSemaphoreSupport;
     }
 
-    @PUT
-    @UserProfileCustomer
-    @BasicAuthenticated
-    @Path(ExampleApiPath.SWITCH)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response switchState(
-            @Context HttpServletRequest httpServletRequest
-    ) {
-        final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
-        exampleSemaphoreSupport.switchState(apiCurrentExecution.getUsername().get());
-        return apiResponse.createdReturns(httpServletRequest, ExampleApiPath.SEMAPHORE);
-    }
-
     @GET
     @UserProfileCustomer
     @BasicAuthenticated
@@ -57,6 +44,18 @@ public class ExampleResourceSemaphore {
     ) {
         final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
         return apiResponse.ok(ExampleResponse.of(exampleSemaphoreSupport.status(apiCurrentExecution.getUsername().get())));
+    }
+
+    @PUT
+    @BasicAuthenticated
+    @Path(ExampleApiPath.SWITCH)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response switchState(
+            @Context HttpServletRequest httpServletRequest
+    ) {
+        final ApiCurrentExecution apiCurrentExecution = ApiCurrentExecution.on(httpServletRequest);
+        exampleSemaphoreSupport.switchState(apiCurrentExecution.getUsername().get());
+        return apiResponse.createdReturns(httpServletRequest, ExampleApiPath.SEMAPHORE);
     }
 
 }

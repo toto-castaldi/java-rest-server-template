@@ -1,5 +1,6 @@
 package com.github.totoCastaldi.restServer.request;
 
+import com.github.totoCastaldi.restServer.authorization.AuthorizationResult;
 import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
 import com.google.common.base.Optional;
 import com.google.inject.assistedinject.Assisted;
@@ -21,11 +22,13 @@ import javax.annotation.Nullable;
 public class BasicAuthorizationRequest implements AuthorizationRequest {
 
     @Getter
-    private final String username;
+    private String username;
     @Getter
-    private final String request;
+    private String request;
     @Getter
-    private final boolean passed;
+    private String errorMessage;
+    @Getter
+    private boolean passed;
 
     public interface Factory {
 
@@ -42,19 +45,23 @@ public class BasicAuthorizationRequest implements AuthorizationRequest {
         String credentialDecode = Base64.decodeAsString(md5Credentials);
         log.debug("credential {}", credentialDecode);
         String[] credentials = StringUtils.splitByWholeSeparator(credentialDecode, ":");
+        this.passed = false;
+        this.errorMessage = StringUtils.EMPTY;
+        this.username = null;
+
         if (credentials != null && credentials.length > 1) {
             this.username = credentials[0];
-            final String password = credentials[1];
 
-            if (basicAuthorization != null && basicAuthorization.checkCredential(username, password)) {
-                this.passed = true;
-            } else {
-                this.passed = false;
+            final String password = credentials[1];
+            if (basicAuthorization != null) {
+                final AuthorizationResult authorizationResult = basicAuthorization.checkCredential(username, password);
+                if (authorizationResult.isPassed()) {
+                    this.passed = true;
+                }
+                this.errorMessage = authorizationResult.getErrorMessage();
             }
-        } else {
-            this.username = null;
-            this.passed = false;
         }
+
     }
 
 }

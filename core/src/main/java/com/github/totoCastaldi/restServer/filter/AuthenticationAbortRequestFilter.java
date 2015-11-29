@@ -5,13 +5,20 @@ import com.github.totoCastaldi.restServer.ApiHeaderUtils;
 import com.github.totoCastaldi.restServer.AuthenticationType;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
 import com.github.totoCastaldi.restServer.response.ErrorResponseCode;
+import com.github.totoCastaldi.restServer.response.ErrorResponseEntry;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by github on 08/11/15.
@@ -43,9 +50,23 @@ abstract class AuthenticationAbortRequestFilter implements ContainerRequestFilte
 
         if (!currentExecution.isAuthenticationPassed()) {
             String authorizationRequest = containerRequestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-            log.info("login post match {} {}", authorizationRequest, currentExecution);
+            log.info("login post match {} {} {}", authorizationRequest, currentExecution, currentExecution.getAuthenticationErrors());
 
-            containerRequestContext.abortWith(apiResponse.unauthorize(httpRequest, apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest, authenticationType), ErrorResponseCode.AUTHENTICATION_REQUIRED));
+            final Iterable<ErrorResponseEntry> errorResponseEntries = Iterables.transform(currentExecution.getAuthenticationErrors(), new Function<String, ErrorResponseEntry>() {
+                @Nullable
+                @Override
+                public ErrorResponseEntry apply(@Nullable String input) {
+                    log.info("error auth {}", input);
+                    return ErrorResponseEntry.of(ErrorResponseCode.AUTHENTICATION_REQUIRED.name(), input);
+                }
+            });
+
+            containerRequestContext.abortWith(
+                    apiResponse.unauthorize(
+                            apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest, authenticationType),
+                            Iterables.toArray(errorResponseEntries, ErrorResponseEntry.class)
+                    )
+            );
         }
 
     }

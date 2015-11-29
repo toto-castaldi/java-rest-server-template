@@ -5,6 +5,6 @@ package com.github.totoCastaldi.restServer.authorization;
  */
 public interface BasicAuthorization extends UserProfile {
 
-    boolean checkCredential(String username, String password);
+    AuthorizationResult checkCredential(String username, String password);
 
 }

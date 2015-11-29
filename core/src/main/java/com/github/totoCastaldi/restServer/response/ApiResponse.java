@@ -22,6 +22,7 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ApiResponse {
 
@@ -200,8 +201,24 @@ public class ApiResponse {
      * @param errors
      * @return
      */
-    public Response unauthorize(final HttpServletRequest httpServletRequest, Iterable<AuthenticationType> authorizationRequestes, ErrorResponseCode... errors) {
+    public Response unauthorize(
+            final HttpServletRequest httpServletRequest,
+            Iterable<AuthenticationType> authorizationRequestes,
+            ErrorResponseCode... errors) {
         Object responseBody = toBody(errors, httpServletRequest);
+        return unauthorize(authorizationRequestes, responseBody);
+    }
+
+    public Response unauthorize(
+            Iterable<AuthenticationType> authorizationRequestes,
+            ErrorResponseEntry... errors) {
+        Object responseBody = toBody(errors);
+        return unauthorize(authorizationRequestes, responseBody);
+    }
+
+    private Response unauthorize(
+            Iterable<AuthenticationType> authorizationRequestes,
+            Object responseBody) {
         Response.ResponseBuilder responseBuilder = Response.status(Response.Status.UNAUTHORIZED);
         if (Iterables.any(authorizationRequestes, new Predicate<AuthenticationType>() {
 

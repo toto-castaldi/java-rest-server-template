@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -45,8 +46,16 @@ public class ApiCurrentExecution {
         setProperty(KEY.HEADERS, headers);
     }
 
+    public void authenticationErrors(List<String> errorMessages) {
+        setProperty(ApiCurrentExecution.KEY.AUTHENTICATION_ERROR_MESSAGES, errorMessages);
+    }
 
-    private enum KEY {AUTHENTICATION_NOT_PASSED, USERNAME, USER_TYPE, HEADERS, LOCALE, AUTHENTICATION_PASSED};
+    public List<String> getAuthenticationErrors() {
+        return getProperty(KEY.AUTHENTICATION_ERROR_MESSAGES);
+    }
+
+
+    private enum KEY {AUTHENTICATION_NOT_PASSED, USERNAME, USER_TYPE, HEADERS, LOCALE, AUTHENTICATION_ERROR_MESSAGES, AUTHENTICATION_PASSED};
 
     public static ApiCurrentExecution on(HttpServletRequest httpServletRequest) {
         return new ApiCurrentExecution(httpServletRequest);
@@ -84,7 +93,8 @@ public class ApiCurrentExecution {
         for (KEY value : KEY.values()) {
             stringBuffer.append(value.name());
             stringBuffer.append("=");
-            stringBuffer.append(String.valueOf(getProperty(value)));
+            final Object property = getProperty(value);
+            stringBuffer.append(String.valueOf(property));
             stringBuffer.append(";");
         }
         return stringBuffer.toString();

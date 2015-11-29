@@ -57,6 +57,7 @@ public class AuthenticationAndProfileRequestFilter implements ContainerRequestFi
 
             List<AuthenticationType> authenticationPassed = Lists.newArrayList();
             List<AuthenticationType> authenticationNotPassed = Lists.newArrayList();
+            List<String> errorMessages = Lists.newArrayList();
 
             for (AuthorizationRequestInfo request : requests) {
                 AuthorizationRequest authorizationRequest = request.getAuthorizationRequest();
@@ -67,6 +68,7 @@ public class AuthenticationAndProfileRequestFilter implements ContainerRequestFi
                     passed = true;
                 } else {
                     authenticationNotPassed.add(authenticationType);
+                    errorMessages.add(authorizationRequest.getErrorMessage());
                 }
             }
             if (passed) {
@@ -79,6 +81,8 @@ public class AuthenticationAndProfileRequestFilter implements ContainerRequestFi
                     currentExecution.setUserType(UserType.NONE);
                 }
             }
+
+            currentExecution.authenticationErrors(errorMessages);
         } else {
             log.debug("no authorization header {}", containerRequestContext.getHeaders());
         }

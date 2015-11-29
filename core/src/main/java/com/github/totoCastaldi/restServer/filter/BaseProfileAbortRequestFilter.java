@@ -7,8 +7,11 @@ import com.github.totoCastaldi.restServer.response.ApiResponse;
 import com.github.totoCastaldi.restServer.response.ErrorResponse;
 import com.github.totoCastaldi.restServer.response.ErrorResponseCode;
 import com.github.totoCastaldi.restServer.response.ErrorResponseEntry;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -53,7 +56,20 @@ public abstract class BaseProfileAbortRequestFilter implements ContainerRequestF
                 containerRequestContext.abortWith(apiResponse.unauthorize(httpRequest, apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest), ErrorResponseCode.INVALID_PROFILE));
             }
         } else {
-            containerRequestContext.abortWith(apiResponse.unauthorize(httpRequest, apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest), ErrorResponseCode.AUTHENTICATION_REQUIRED));
+            final Iterable<ErrorResponseEntry> errorResponseEntries = Iterables.transform(currentExecution.getAuthenticationErrors(), new Function<String, ErrorResponseEntry>() {
+                @Nullable
+                @Override
+                public ErrorResponseEntry apply(@Nullable String input) {
+                    log.info("error auth {}", input);
+                    return ErrorResponseEntry.of(ErrorResponseCode.AUTHENTICATION_REQUIRED.name(), input);
+                }
+            });
+
+
+            containerRequestContext.abortWith(
+                    apiResponse.unauthorize(
+                            apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest),
+                            Iterables.toArray(errorResponseEntries, ErrorResponseEntry.class)));
         }
 
     }
