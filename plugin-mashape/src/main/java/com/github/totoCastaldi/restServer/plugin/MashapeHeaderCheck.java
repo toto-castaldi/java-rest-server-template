@@ -8,6 +8,7 @@ import com.github.totoCastaldi.restServer.response.ApiResponse;
 import com.github.totoCastaldi.restServer.response.ErrorResponse;
 import com.github.totoCastaldi.restServer.response.ErrorResponseEntry;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.name.Names;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -29,12 +30,11 @@ public class MashapeHeaderCheck implements ContainerRequestFilter {
     public MashapeHeaderCheck(
             ApiResponse apiResponse,
             Injector injector,
-            @Named(configName) String configName
+            @Named(MashapeHeaderCheck.configName) String configName
 
     ) {
         this.apiResponse = apiResponse;
-        injector.getBinding(Names.named(configName)).
-        this.mashapeApiSecret = System.getProperty("X-Mashape-Proxy-Secret");
+        this.mashapeApiSecret = injector.getInstance(Key.get(String.class, Names.named(configName)));
     }
 
     public void filter(ContainerRequestContext requestContext) throws IOException {

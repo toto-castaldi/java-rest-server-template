@@ -16,6 +16,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.toto-castaldi.services.restServer</groupId>
+            <artifactId>core</artifactId>
+            <version>1.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-persist</artifactId>
             <version>${guice.version}</version>

@@ -2,7 +2,7 @@ package com.acme.services;
 
 import com.github.totoCastaldi.restServer.ApiServletContextListener;
 import com.github.totoCastaldi.restServer.RestServerConf;
-import com.github.totoCastaldi.restServer.plugin.PersistenModule;
+import com.github.totoCastaldi.restServer.plugin.PersistencePlugin;
 import com.google.inject.AbstractModule;
 
 /**
@@ -18,11 +18,10 @@ public class ExampleApiServletContextListener extends ApiServletContextListener 
         builder.add(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ExampleResourceSupport.class);
                 bind(ExampleDao.class);
             }
         });
-        builder.add(new PersistenModule());
+        builder.add(new PersistencePlugin());
         return builder.build();
     }
 }

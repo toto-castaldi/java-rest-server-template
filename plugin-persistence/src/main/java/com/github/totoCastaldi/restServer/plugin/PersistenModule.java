@@ -7,7 +7,7 @@ import com.google.inject.servlet.ServletModule;
 /**
  * Created by toto on 14/11/15.
  */
-public class PersistenModule extends ServletModule {
+class PersistenModule extends ServletModule {
 
     @Override
     protected void configureServlets() {
