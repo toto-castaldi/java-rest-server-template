@@ -1,16 +1,17 @@
 package com.github.totoCastaldi.restServer.request;
 
+import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
 import com.google.common.base.Optional;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.github.totoCastaldi.restServer.ApiPassword;
-import com.github.totoCastaldi.restServer.model.CustomerDao;
-import com.github.totoCastaldi.restServer.model.CustomerEntity;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.internal.util.Base64;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by github on 08/11/15.
@@ -34,8 +35,7 @@ public class BasicAuthorizationRequest implements AuthorizationRequest {
 
     @AssistedInject
     public BasicAuthorizationRequest(
-            CustomerDao CustomerDao,
-            ApiPassword apiPassword,
+            @Nullable BasicAuthorization basicAuthorization,
             @Assisted("md5Credentials") String md5Credentials
     ) {
         this.request = md5Credentials;
@@ -45,8 +45,8 @@ public class BasicAuthorizationRequest implements AuthorizationRequest {
         if (credentials != null && credentials.length > 1) {
             this.username = credentials[0];
             final String password = credentials[1];
-            final Optional<CustomerEntity> lightUserEntityOptional = CustomerDao.findByUsername(this.username);
-            if (lightUserEntityOptional.isPresent() && apiPassword.validate(lightUserEntityOptional.get(), password)) {
+
+            if (basicAuthorization != null && basicAuthorization.checkCredential(username, password)) {
                 this.passed = true;
             } else {
                 this.passed = false;

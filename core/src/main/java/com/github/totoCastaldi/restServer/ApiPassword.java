@@ -1,6 +1,5 @@
 package com.github.totoCastaldi.restServer;
 
-import com.github.totoCastaldi.restServer.model.CustomerEntity;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -17,10 +16,6 @@ public class ApiPassword {
 
     public String encodePassword(String username, String password) {
         return DigestUtils.md5Hex(password + seed + username);
-    }
-
-    public boolean validate(CustomerEntity user, String password) {
-        return validate(user.getUsername(), password, user.getEncodedPassword());
     }
 
     public boolean validate(String userName, String password, String encodedPassword) {

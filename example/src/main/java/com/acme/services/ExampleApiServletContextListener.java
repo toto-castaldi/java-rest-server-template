@@ -16,8 +16,6 @@ public class ExampleApiServletContextListener extends ApiServletContextListener 
     public RestServerConf getAppConf() {
         RestServerConf.Builder builder = RestServerConf.builder();
         builder.add(ExampleResourceSemaphore.class.getPackage());
-        builder.setCustomerDao(ExampleCustomerDao.class);
-        builder.setPassworSeed("13354-PWD");
         builder.add(ExampleHeaderCheckFilter.class);
         builder.add(new AbstractModule() {
             @Override
@@ -27,6 +25,7 @@ public class ExampleApiServletContextListener extends ApiServletContextListener 
             }
         });
         builder.addStringConf(CONF_TEST);
+        builder.set(ExampleBasicAuthorization.class);
         return builder.build();
     }
 }

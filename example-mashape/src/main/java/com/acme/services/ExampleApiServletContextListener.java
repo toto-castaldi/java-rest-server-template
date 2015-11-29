@@ -9,7 +9,7 @@ public class ExampleApiServletContextListener extends ApiServletContextListener 
     @Override
     public RestServerConf getAppConf() {
         RestServerConf.Builder builder = RestServerConf.builder();
-        builder.add(ExampleResourceViolation.class.getPackage());
+        builder.add(ExampleResource.class.getPackage());
         builder.add(new MashapePlugin("MASHAPE-KEY"));
         return builder.build();
     }

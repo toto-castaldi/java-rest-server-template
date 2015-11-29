@@ -3,7 +3,8 @@ package com.github.totoCastaldi.restServer;
 import com.github.totoCastaldi.commons.GuiceInjector;
 import com.github.totoCastaldi.commons.MemoryShutdownableRepository;
 import com.github.totoCastaldi.commons.ShutdownableRepository;
-import com.github.totoCastaldi.restServer.model.CustomerDao;
+import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
+import com.github.totoCastaldi.restServer.authorization.UserProfile;
 import com.github.totoCastaldi.restServer.request.BasicAuthorizationRequest;
 import com.github.totoCastaldi.restServer.response.ApiErrorMessage;
 import com.github.totoCastaldi.restServer.response.ApiResponse;
@@ -16,6 +17,7 @@ import com.google.inject.Module;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.GuiceServletContextListener;
+import com.google.inject.util.Providers;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.*;
 
@@ -64,14 +66,19 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
                         }
 
                         bind(ApiResponse.class);
-                        bind(UserProfile.class);
                         bind(ApiHeaderUtils.class);
                         bind(ApiScheduler.class);
                         bind(TimeProvider.class);
                         bind(ShutdownableRepository.class).to(MemoryShutdownableRepository.class);
-                        bind(CustomerDao.class).to(appModule.getCustomerDao());
-                        bind(ApiPassword.class).toInstance(new ApiPassword(appModule.getSeed()));
                         bind(ApiErrorMessage.class).toInstance(appModule.getApiErrorMessage());
+
+                        if (appModule.getBasicAuthorizationSupport() != null) {
+                            bind(BasicAuthorization.class).to(appModule.getBasicAuthorizationSupport());
+                            bind(UserProfile.class).to(appModule.getBasicAuthorizationSupport());
+                        } else {
+                            bind(BasicAuthorization.class).toProvider(Providers.of((BasicAuthorization)null));
+                            bind(UserProfile.class).toProvider(Providers.of((UserProfile)null));
+                        }
 
                         install(factoryModuleBuilder.build(BasicAuthorizationRequest.Factory.class));
                         install(factoryModuleBuilder.build(ErrorResponseEntry.Factory.class));

@@ -1,20 +1,16 @@
 package com.github.totoCastaldi.restServer;
 
-import com.github.totoCastaldi.restServer.model.CustomerDao;
-import com.github.totoCastaldi.restServer.model.DummyCustomerDao;
+import com.github.totoCastaldi.restServer.authorization.BasicAuthorization;
 import com.github.totoCastaldi.restServer.plugin.Plugin;
 import com.github.totoCastaldi.restServer.response.ApiErrorMessage;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang.StringUtils;
 
 import javax.ws.rs.container.ContainerRequestFilter;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,15 +20,13 @@ import java.util.List;
 public class RestServerConf {
 
     @Getter
+    private Class<? extends BasicAuthorization> basicAuthorizationSupport = null;
+    @Getter
     private List<AppConfKey> confKeys = Lists.newArrayList();
     @Getter
     private List<Package> packages = Lists.newArrayList();
     @Getter
     private List<AbstractModule> modules = Lists.newArrayList();
-    @Getter
-    private Class<? extends CustomerDao> customerDao = DummyCustomerDao.class;
-    @Getter
-    private String seed = StringUtils.EMPTY;
     @Getter
     private List<Class<? extends ContainerRequestFilter>> filters = Lists.newArrayList();
     @Getter
@@ -67,18 +61,13 @@ public class RestServerConf {
             return this;
         }
 
+        public Builder set(Class<? extends BasicAuthorization> basicAuthorizationClass) {
+            result.basicAuthorizationSupport = basicAuthorizationClass;
+            return this;
+        }
+
         public RestServerConf build() {
             return result;
-        }
-
-        public Builder setCustomerDao(Class<? extends CustomerDao> customerDao) {
-            result.customerDao = customerDao;
-            return this;
-        }
-
-        public Builder setPassworSeed(String seed) {
-            result.seed = seed;
-            return this;
         }
 
         public Builder addStringConf(String key) {

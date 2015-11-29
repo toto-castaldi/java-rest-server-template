@@ -1,5 +1,6 @@
 package com.github.totoCastaldi.restServer.filter;
 
+import com.github.totoCastaldi.restServer.authorization.UserProfile;
 import com.google.common.collect.Lists;
 import com.github.totoCastaldi.restServer.*;
 import com.github.totoCastaldi.restServer.request.AuthorizationRequest;
@@ -7,6 +8,7 @@ import com.github.totoCastaldi.restServer.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -31,7 +33,7 @@ public class AuthenticationAndProfileRequestFilter implements ContainerRequestFi
     public AuthenticationAndProfileRequestFilter(
             ApiHeaderUtils apiHeaderUtils,
             ApiResponse apiResponse,
-            UserProfile userProfile,
+            @Nullable UserProfile userProfile,
             @Context HttpServletRequest httpServletRequest
     ) {
         this.apiHeaderUtils = apiHeaderUtils;
@@ -71,7 +73,11 @@ public class AuthenticationAndProfileRequestFilter implements ContainerRequestFi
                 currentExecution.setUsername(username);
                 currentExecution.authenticationPassed(authenticationPassed);
                 currentExecution.authenticationNotPassed(authenticationNotPassed);
-                currentExecution.setUserType(userProfile.resolve(username).get());
+                if (userProfile != null) {
+                    currentExecution.setUserType(userProfile.resolve(username).get());
+                } else {
+                    currentExecution.setUserType(UserType.NONE);
+                }
             }
         } else {
             log.debug("no authorization header {}", containerRequestContext.getHeaders());

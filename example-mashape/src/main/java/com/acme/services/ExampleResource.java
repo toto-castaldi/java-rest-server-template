@@ -12,13 +12,13 @@ import javax.ws.rs.core.Response;
 
 @Path("example")
 @Slf4j
-public class ExampleResourceViolation {
+public class ExampleResource {
 
 
     private final ApiResponse apiResponse;
 
     @Inject
-    public ExampleResourceViolation(
+    public ExampleResource(
             ApiResponse apiResponse
     ) {
         this.apiResponse = apiResponse;
