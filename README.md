@@ -5,13 +5,17 @@ java-rest-server-template
 <dependency>
 	<groupId>com.github.toto-castaldi.services.restServer</groupId>
     <artifactId>core</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
+
+
 ```
 
 Skip sign in maven
-`mvn -DperformSign=true `
+`mvn -DperformSign=false `
+
 Deploy snapshot
-`mvn clean deploy`
+`mvn clean deploy `
+
 Deploy release
-`mvn clean deploy -P ossrh`
+`mvn clean deploy -P release-sign-artifacts`
