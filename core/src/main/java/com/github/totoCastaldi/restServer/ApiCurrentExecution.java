@@ -46,12 +46,17 @@ public class ApiCurrentExecution {
         setProperty(KEY.HEADERS, headers);
     }
 
-    public void authenticationErrors(List<String> errorMessages) {
+    public void authenticationErrors(Iterable<String> errorMessages) {
         setProperty(ApiCurrentExecution.KEY.AUTHENTICATION_ERROR_MESSAGES, errorMessages);
     }
 
-    public List<String> getAuthenticationErrors() {
-        return getProperty(KEY.AUTHENTICATION_ERROR_MESSAGES);
+    public Iterable<String> getAuthenticationErrors() {
+        Iterable<String> result = getProperty(KEY.AUTHENTICATION_ERROR_MESSAGES);
+        if (result == null) {
+            return Lists.newArrayList();
+        } else {
+            return result;
+        }
     }
 
 

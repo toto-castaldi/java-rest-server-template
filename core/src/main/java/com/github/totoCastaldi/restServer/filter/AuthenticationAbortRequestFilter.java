@@ -61,12 +61,23 @@ abstract class AuthenticationAbortRequestFilter implements ContainerRequestFilte
                 }
             });
 
-            containerRequestContext.abortWith(
-                    apiResponse.unauthorize(
-                            apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest, authenticationType),
-                            Iterables.toArray(errorResponseEntries, ErrorResponseEntry.class)
-                    )
-            );
+            if (Iterables.size(errorResponseEntries) > 0) {
+
+                containerRequestContext.abortWith(
+                        apiResponse.unauthorize(
+                                apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest, authenticationType),
+                                Iterables.toArray(errorResponseEntries, ErrorResponseEntry.class)
+                        )
+                );
+            } else {
+                containerRequestContext.abortWith(
+                        apiResponse.unauthorize(
+                                httpRequest,
+                                apiHeaderUtils.parseAuthorizationRequestes(authorizationRequest, authenticationType),
+                                ErrorResponseCode.AUTHENTICATION_REQUIRED
+                        )
+                );
+            }
         }
 
     }
