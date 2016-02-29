@@ -82,11 +82,21 @@ public class RestServerConf {
             result.confKeys.add(AppConfKey.of(TYPE.STRING, key));
             return this;
         }
+
+        public Builder addIntConf(String key) {
+            result.confKeys.add(AppConfKey.of(TYPE.INTEGER, key));
+            return this;
+        }
+
+        public Builder addBooleanConf(String key) {
+            result.confKeys.add(AppConfKey.of(TYPE.BOOLEAN, key));
+            return this;
+        }
     }
 
 
     public static enum TYPE {
-        STRING
+        STRING, INTEGER, BOOLEAN
 
     }
 

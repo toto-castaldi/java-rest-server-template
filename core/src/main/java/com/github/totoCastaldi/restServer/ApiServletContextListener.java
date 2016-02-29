@@ -20,6 +20,7 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.util.Providers;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.*;
+import org.apache.commons.lang.BooleanUtils;
 
 import java.util.List;
 
@@ -63,6 +64,8 @@ public abstract class ApiServletContextListener extends GuiceServletContextListe
 
                         for (RestServerConf.AppConfKey confKey : confKeys) {
                             if (confKey.getClazz() == RestServerConf.TYPE.STRING) bind(String.class).annotatedWith(Names.named(confKey.getName())).toInstance(compositeConfiguration.getString(confKey.getName()));
+                            if (confKey.getClazz() == RestServerConf.TYPE.INTEGER) bind(Integer.class).annotatedWith(Names.named(confKey.getName())).toInstance(Integer.valueOf(compositeConfiguration.getString(confKey.getName())));
+                            if (confKey.getClazz() == RestServerConf.TYPE.BOOLEAN) bind(Boolean.class).annotatedWith(Names.named(confKey.getName())).toInstance(BooleanUtils.toBoolean(compositeConfiguration.getString(confKey.getName())));
                         }
 
                         bind(ApiResponse.class);
