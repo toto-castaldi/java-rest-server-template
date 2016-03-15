@@ -9,20 +9,26 @@ import com.google.inject.name.Names;
  */
 public class MashapePlugin implements Plugin {
 
-    private final String configKey;
+    private final String headerConfigKey;
+    private final String switchConfigKey;
 
-    public MashapePlugin(String configKey) {
+    public MashapePlugin(
+            String headerConfigKey,
+            String switchConfigKey
+    ) {
         super();
-        this.configKey = configKey;
+        this.headerConfigKey = headerConfigKey;
+        this.switchConfigKey = switchConfigKey;
     }
 
     @Override
     public void config(RestServerConf.Builder builder) {
-        builder.addStringConf(configKey);
+        builder.addStringConf(headerConfigKey);
         builder.add(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(String.class).annotatedWith(Names.named(MashapeHeaderCheck.configName)).toInstance(configKey);
+                bind(String.class).annotatedWith(Names.named(MashapeHeaderCheck.headerConfigName)).toInstance(headerConfigKey);
+                bind(String.class).annotatedWith(Names.named(MashapeHeaderCheck.switchConfigName)).toInstance(switchConfigKey);
             }
         });
         builder.add(MashapeHeaderCheck.class);
